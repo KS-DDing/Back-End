@@ -1,37 +1,52 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model Post {
-  id        Int      @default(autoincrement()) @id
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime
   title     String   @db.VarChar(255)
   content   String?
   published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
+  user      User     @relation(fields: [authorId], references: [id])
+
+  @@index([authorId], name: "authorId")
+  @@map(name: "posts")
 }
 
 model Profile {
-  id     Int     @default(autoincrement()) @id
+  id     Int     @id @default(autoincrement())
   bio    String?
-  user   User    @relation(fields: [userId], references: [id])
   userId Int     @unique
+  user   User    @relation(fields: [userId], references: [id])
+
+  @@map(name: "profiles")
 }
 
 model User {
-  id      Int      @default(autoincrement()) @id
-  email   String   @unique
-  name    String?
-  posts   Post[]
-  profile Profile?
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  createAt DateTime  @default(now())
+  updateAt DateTime? @updatedAt
+  name     String?
+  country  String    @db.VarChar(57)
+  password String
+  nickname String?
+  post     Post[]
+  profile  Profile?
+
+  @@map(name: "users")
+}
+
+model Comment {
+  id      Int    @id @default(autoincrement())
+  content String @db.Text
+
 }
