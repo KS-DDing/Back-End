@@ -27,7 +27,7 @@ passportSession(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/users', UserController);
+app.use('/api/users', UserController);
 app.listen(env.PORT, () => {
   console.log('서버시작');
 });

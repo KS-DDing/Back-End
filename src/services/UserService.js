@@ -21,6 +21,7 @@ export const SignUp = async (req, res, next) => {
 
 export const Login = (req, res, next) => {
   //여기 req, res, next 받을 수 있게 한번 감싸줄 수 있는 거 기억 잘하기!
+  console.log(req.body);
   passport.authenticate('local', (err, user, info) => {
     if (err) {
       return next(err);
