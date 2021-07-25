@@ -34,3 +34,11 @@ export const createUser = async data => {
     console.error(err);
   }
 };
+
+export const getUsers = async () => {
+  try {
+    return await prisma.user.findMany({});
+  } catch (err) {
+    console.error(err);
+  }
+};
