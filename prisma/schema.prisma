@@ -1,52 +1,101 @@
-generator client {
-  provider = "prisma-client-js"
-}
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime
-  title     String   @db.VarChar(255)
-  content   String?
-  published Boolean  @default(false)
-  authorId  Int
-  user      User     @relation(fields: [authorId], references: [id])
-
-  @@index([authorId], name: "authorId")
-  @@map(name: "posts")
-}
-
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  userId Int     @unique
-  user   User    @relation(fields: [userId], references: [id])
-
-  @@map(name: "profiles")
+generator client {
+  provider = "prisma-client-js"
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  email    String    @unique
-  createAt DateTime  @default(now())
-  updateAt DateTime? @updatedAt
-  name     String?
-  country  String    @db.VarChar(57)
-  password String
-  nickname String?
-  post     Post[]
-  profile  Profile?
+  id         Int       @id @default(autoincrement())
+  email      String    @unique @db.VarChar(30)
+  name       String    @unique @db.VarChar(30)
+  password   String    @db.VarChar(200)
+  createAt   DateTime  @default(now())
+  updateAt   DateTime? @updatedAt
+  posts      Post[]
+  comments   Comment[]
+  liker      Like[]
+  followers  User[]    @relation("UserFollows", references: [id])
+  followings User[]    @relation("UserFollows", references: [id])
 
   @@map(name: "users")
 }
 
-model Comment {
-  id      Int    @id @default(autoincrement())
-  content String @db.Text
+model Post {
+  id       Int      @id @default(autoincrement())
+  content  String   @db.Text
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+  author   User     @relation(fields: [userId], references: [id])
+  userId   Int
 
+  retweettedPost   Post?  @relation("Retweet", fields: [retweettedPostId], references: [id])
+  retweettedPostId Int?
+  retweetterPost   Post[] @relation("Retweet")
+
+  comments Comment[]
+  images   Image[]
+  hashtags PostHashtag[]
+  liker    Like[]
+  @@map("posts")
+}
+
+model Comment {
+  id          Int      @id @default(autoincrement())
+  content     String   @db.Text
+  createAt    DateTime @default(now())
+  updateAt    DateTime @updatedAt
+  commenter   User     @relation(fields: [userId], references: [id])
+  userId      Int
+  PostComment Post     @relation(fields: [postId], references: [id])
+  postId      Int
+
+  @@map("comments")
+}
+
+model Image {
+  id        Int      @id @default(autoincrement())
+  src       String
+  createAt  DateTime @default(now())
+  updateAt  DateTime @updatedAt
+  postImage Post     @relation(fields: [postId], references: [id])
+  postId    Int
+
+  @@map("images")
+}
+
+model Hashtag {
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(20)
+  createAt     DateTime      @default(now())
+  updateAt     DateTime      @updatedAt
+  posthashtags PostHashtag[]
+
+
+  @@map("hashtags")
+}
+
+model PostHashtag {
+  post      Post    @relation(fields: [postId], references: [id])
+  postId    Int
+  hashtag   Hashtag @relation(fields: [hashtagId], references: [id])
+  hashtagId Int
+
+  @@id([postId, hashtagId])
+  @@map("posthashtags")
+}
+
+model Like {
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+  post   Post @relation(fields: [postId], references: [id])
+  postId Int
+
+  @@id([userId, postId])
+  @@map("likes")
 }
