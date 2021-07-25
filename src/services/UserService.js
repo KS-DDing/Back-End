@@ -54,6 +54,11 @@ export const Logout = (req, res, next) => {
 
 //임시용
 export const userInfo = async (req, res, next) => {
-  const user = await UserRepository.getUsers();
-  return res.send(user);
+  try {
+    const user = await UserRepository.getUsers();
+    return res.send(user);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
 };
