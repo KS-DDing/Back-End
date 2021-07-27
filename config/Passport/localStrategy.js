@@ -23,6 +23,7 @@ export default passport => {
           }
           return done(null, user);
         } catch (err) {
+          console.log('hi');
           console.error(err);
         }
       }
