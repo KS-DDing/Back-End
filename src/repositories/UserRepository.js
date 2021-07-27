@@ -42,3 +42,13 @@ export const getUsers = async () => {
     console.error(err);
   }
 };
+
+export const findUserByName = async name => {
+  try {
+    return await prisma.user.findUnique({
+      where: { name },
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};

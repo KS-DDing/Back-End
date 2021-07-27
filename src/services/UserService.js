@@ -18,6 +18,33 @@ export const SignUp = async (req, res, next) => {
     next();
   }
 };
+export const CheckEmail = async (req, res, next) => {
+  const user = await UserRepository.findUserByEmail(req.body.email);
+  try {
+    if (user) {
+      return res.send('이미 가입된 이메일입니다.');
+    } else {
+      return res.status(200).send(req.body.email);
+    }
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+export const CheckName = async (req, res, next) => {
+  const name = await UserRepository.findUserByName(req.body.name);
+  try {
+    if (name) {
+      return res.send('이미 있는 닉네임입니다.');
+    } else {
+      return res.status(200).send(req.body.name);
+    }
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
 
 export const Login = (req, res, next) => {
   //여기 req, res, next 받을 수 있게 한번 감싸줄 수 있는 거 기억 잘하기!
