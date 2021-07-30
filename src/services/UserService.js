@@ -100,10 +100,7 @@ export const UserInfo = async (req, res, next) => {
 
 export const UserProfile = async (req, res, next) => {
   try {
-    console.log(req.session);
-    console.log(req.cookie);
-    const userProfile = await UserRepository.findUserById(req.session.passport.user);
-
+    const userProfile = await UserRepository.findUserById(req.session.passport.user.id);
     return res.send({ id: userProfile.id, name: userProfile.name, email: userProfile.email });
   } catch (err) {
     console.error(err);
