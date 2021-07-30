@@ -7,7 +7,7 @@ export const SignUp = async (req, res, next) => {
   const user = req.body;
   try {
     if (!user) {
-      return res.status(406).send('Error.');
+      return res.send('Error.');
     } else {
       req.body.password = await bcrypt.hash(req.body.password, 11);
       const response = await UserRepository.createUser(req.body);
@@ -18,6 +18,8 @@ export const SignUp = async (req, res, next) => {
     next('에러입니다');
   }
 };
+
+//회원가입시 이메일 따로 중복검사
 export const CheckEmail = async (req, res, next) => {
   const user = await UserRepository.findUserByEmail(req.body.email);
   try {
@@ -32,6 +34,7 @@ export const CheckEmail = async (req, res, next) => {
   }
 };
 
+//회원가입시 닉네임 따로 중복검사
 export const CheckName = async (req, res, next) => {
   const name = await UserRepository.findUserByName(req.body.name);
   try {
@@ -46,9 +49,13 @@ export const CheckName = async (req, res, next) => {
   }
 };
 
+//로그인
+//email, password 값중 빈값이 오면 오류
+
 export const Login = (req, res, next) => {
   //여기 req, res, next 받을 수 있게 한번 감싸줄 수 있는 거 기억 잘하기!
   passport.authenticate('local', (err, user, info) => {
+    console.log('hello');
     if (err) {
       return next(err);
     }
@@ -66,6 +73,7 @@ export const Login = (req, res, next) => {
   })(req, res, next);
 };
 
+//로그아웃. 성공시 success:true 전달
 export const Logout = (req, res, next) => {
   req.logOut();
   req.session.destroy(err => {
@@ -74,16 +82,29 @@ export const Logout = (req, res, next) => {
       return next(err);
     } else {
       //connect.sid : 고유식별자 --> 고유식별자 쿠키에서 지우겠다는 의미.
-      return res.clearCookie('connect.sid').status(200).send('success');
+      return res.clearCookie('connect.sid').status(200).send({ success: true });
     }
   });
 };
 
-//임시용
-export const userInfo = async (req, res, next) => {
+//유저정보 다 끌어오는거. 임시용
+export const UserInfo = async (req, res, next) => {
   try {
     const user = await UserRepository.getUsers();
     return res.send(user);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+export const UserProfile = async (req, res, next) => {
+  try {
+    console.log(req.session);
+    console.log(req.cookie);
+    const userProfile = await UserRepository.findUserById(req.session.passport.user);
+
+    return res.send({ name: userProfile.name, email: userProfile.email });
   } catch (err) {
     console.error(err);
     next(err);

@@ -3,6 +3,7 @@ import localStrategy from './localStrategy';
 
 export default passport => {
   passport.serializeUser((user, done) => {
+    //유저아이디를 전달해서 session을 구분.
     done(null, user.id);
   });
 
