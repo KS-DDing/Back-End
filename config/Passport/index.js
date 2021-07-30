@@ -4,11 +4,11 @@ import localStrategy from './localStrategy';
 export default passport => {
   passport.serializeUser((user, done) => {
     //유저아이디를 전달해서 session을 구분.
-    done(null, user.id);
+    done(null, { id: user.id, isAdmin: user.isAdmin });
   });
 
-  passport.deserializeUser(async (id, done) => {
-    const user = await findUserById(id);
+  passport.deserializeUser(async (info, done) => {
+    const user = await findUserById(info.id);
     try {
       if (user) {
         done(null, user);

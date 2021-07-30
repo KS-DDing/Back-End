@@ -18,6 +18,7 @@ model User {
   createAt   DateTime  @default(now())
   updateAt   DateTime? @updatedAt
   posts      Post[]
+  isAdmin    Int       @default(0) //admin일 경우 1, 일반 사용자일 경우 0
   comments   Comment[]
   liker      Like[]
   followers  User[]    @relation("UserFollows", references: [id])

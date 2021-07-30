@@ -104,7 +104,7 @@ export const UserProfile = async (req, res, next) => {
     console.log(req.cookie);
     const userProfile = await UserRepository.findUserById(req.session.passport.user);
 
-    return res.send({ name: userProfile.name, email: userProfile.email });
+    return res.send({ id: userProfile.id, name: userProfile.name, email: userProfile.email });
   } catch (err) {
     console.error(err);
     next(err);
