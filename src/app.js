@@ -6,8 +6,9 @@ import logger from 'morgan';
 import passport from 'passport';
 import env from '../config';
 import passportSession from '../config/Passport/index';
+import PostController from './controllers/PostController';
+import PostsController from './controllers/PostsController';
 import UserController from './controllers/UserController';
-
 const app = express();
 app.use(logger('dev'));
 app.use(express.json());
@@ -27,7 +28,11 @@ passportSession(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
+//controllers
 app.use('/api/users', UserController);
+app.use('/api/post', PostController);
+app.use('/api/posts', PostsController);
+
 app.listen(env.PORT, () => {
   console.log('서버시작');
 });

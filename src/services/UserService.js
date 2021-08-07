@@ -100,6 +100,7 @@ export const UserInfo = async (req, res, next) => {
 
 export const UserProfile = async (req, res, next) => {
   try {
+    //여기 깨끗하게 정리.
     const userProfile = await UserRepository.findUserById(req.session.passport.user.id);
     return res.send({ id: userProfile.id, name: userProfile.name, email: userProfile.email });
   } catch (err) {

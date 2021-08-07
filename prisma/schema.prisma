@@ -29,6 +29,7 @@ model User {
 
 model Post {
   id       Int      @id @default(autoincrement())
+  title    String
   content  String   @db.Text
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
@@ -39,10 +40,11 @@ model Post {
   retweettedPostId Int?
   retweetterPost   Post[] @relation("Retweet")
 
-  comments Comment[]
-  images   Image[]
-  hashtags PostHashtag[]
-  liker    Like[]
+  comments  Comment[]
+  thumbnail Image?        @relation("thumbnailImage")
+  images    Image[]       @relation("PostImage")
+  hashtags  PostHashtag[]
+  liker     Like[]
   @@map("posts")
 }
 
@@ -60,12 +62,13 @@ model Comment {
 }
 
 model Image {
-  id        Int      @id @default(autoincrement())
-  src       String
-  createAt  DateTime @default(now())
-  updateAt  DateTime @updatedAt
-  postImage Post     @relation(fields: [postId], references: [id])
-  postId    Int
+  id             Int      @id @default(autoincrement())
+  src            String
+  createAt       DateTime @default(now())
+  updateAt       DateTime @updatedAt
+  thumbnailImage Post     @relation("thumbnailImage", fields: [postId], references: [id])
+  postImage      Post     @relation("PostImage", fields: [postId], references: [id])
+  postId         Int
 
   @@map("images")
 }
