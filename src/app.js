@@ -7,8 +7,11 @@ import passport from 'passport';
 import env from '../config';
 import passportSession from '../config/Passport/index';
 import PostController from './controllers/PostController';
-import PostsController from './controllers/PostViewController';
+
+import PostViewController from './controllers/PostViewController';
+
 import UserController from './controllers/UserController';
+
 const app = express();
 app.use(logger('dev'));
 app.use(express.json());
@@ -31,7 +34,7 @@ app.use(passport.session());
 //controllers
 app.use('/api/users', UserController);
 app.use('/api/post', PostController);
-app.use('/api/posts', PostsController);
+app.use('/api/posts', PostViewController);
 
 app.listen(env.PORT, () => {
   console.log('서버시작');
