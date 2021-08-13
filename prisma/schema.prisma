@@ -41,7 +41,7 @@ model Post {
   retweetterPost   Post[] @relation("Retweet")
 
   comments  Comment[]
-  thumbnail Image?        @relation("thumbnailImage")
+  thumbnail thumbnail?    @relation("thumbnailImage")
   images    Image[]       @relation("PostImage")
   hashtags  PostHashtag[]
   liker     Like[]
@@ -62,15 +62,26 @@ model Comment {
 }
 
 model Image {
+  id        Int      @id @default(autoincrement())
+  src       String
+  createAt  DateTime @default(now())
+  updateAt  DateTime @updatedAt
+  postImage Post     @relation("PostImage", fields: [postId], references: [id])
+  contentId Int
+  postId    Int
+
+  @@map("images")
+}
+
+model thumbnail {
   id             Int      @id @default(autoincrement())
   src            String
   createAt       DateTime @default(now())
   updateAt       DateTime @updatedAt
   thumbnailImage Post     @relation("thumbnailImage", fields: [postId], references: [id])
-  postImage      Post     @relation("PostImage", fields: [postId], references: [id])
   postId         Int
 
-  @@map("images")
+  @@map("thumbnails")
 }
 
 model Hashtag {
