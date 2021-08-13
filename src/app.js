@@ -7,7 +7,7 @@ import passport from 'passport';
 import env from '../config';
 import passportSession from '../config/Passport/index';
 import PostController from './controllers/PostController';
-import PostsController from './controllers/PostsController';
+import PostsController from './controllers/PostViewController';
 import UserController from './controllers/UserController';
 const app = express();
 app.use(logger('dev'));
