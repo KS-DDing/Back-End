@@ -19,23 +19,25 @@ export const createPost = async (userId, data) => {
   }
 };
 
-export const updatePost = async data => {
+export const updatePost = async (postId, data) => {
   try {
     return await prisma.post.update({
-      where: { id: data.id },
-      data,
+      where: { id: postId },
+      data: {
+        title: data.title,
+        content: data.content,
+        userId: data.userId,
+      },
     });
   } catch (err) {
     console.error(err);
   }
 };
 
-export const getPost = async postId => {
+export const deletePost = async postId => {
   try {
-    return await prisma.post.findUnique({
-      where: {
-        id: postId,
-      },
+    return await prisma.post.delete({
+      where: { id: postId },
     });
   } catch (err) {
     console.error(err);

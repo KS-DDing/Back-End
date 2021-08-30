@@ -9,6 +9,6 @@ router.get('/');
 
 //게시글 작성
 router.post('/', AuthHander.isLoggined, PostService.WritePost);
-router.get('/:postid', PostService.getPost);
-
+router.post('/edit', AuthHander.isLoggined, PostService.editPost);
+router.post('/delete', AuthHander.isLoggined, PostService.deletePost);
 export default router;

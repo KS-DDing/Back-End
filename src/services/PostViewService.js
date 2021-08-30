@@ -19,3 +19,14 @@ export const getUserPosts = async (req, res, next) => {
     next(err);
   }
 };
+
+export const getPost = async (req, res, next) => {
+  try {
+    const postId = parseInt(req.params.postid);
+    const posts = await PostViewRepository.getPost(postId);
+    return res.status(200).send(posts);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};

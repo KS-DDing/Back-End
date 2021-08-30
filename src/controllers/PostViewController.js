@@ -5,6 +5,6 @@ const router = express.Router();
 
 //한 유저의 게시글 목록을 보고싶을 때
 router.get('/', PostViewService.getAllPosts);
-router.get('/:userid', PostViewService.getUserPosts);
-
+router.get('/user', PostViewService.getUserPosts);
+router.get('/single', PostViewService.getPost);
 export default router;

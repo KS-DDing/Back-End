@@ -12,11 +12,28 @@ export const WritePost = async (req, res, next) => {
   }
 };
 
-export const getPost = async (req, res, next) => {
+export const editPost = async (req, res, next) => {
   try {
-    const postId = parseInt(req.params.postid);
-    const posts = await PostRepository.getPost(postId);
-    return res.status(200).send(posts);
+    const editedPost = await PostRepository.updatePost(req.params.posdId, req.body);
+    if (!editedPost) {
+      res.send('게시글 수정중 오류가 발생하였습니다.');
+    } else {
+      res.status(200).send('게시글을 수정하였습니다.');
+    }
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+export const deletePost = async (req, res, next) => {
+  try {
+    const toDelete = await PostRepository.deletePost(req.body.postId);
+    if (!toDelete) {
+      res.send('게시글 삭제도중 오류가 발생하였습니다.');
+    } else {
+      res.status(200).send('게시글을 삭제하였습니다.');
+    }
   } catch (err) {
     console.error(err);
     next(err);

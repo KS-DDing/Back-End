@@ -27,10 +27,27 @@ export const getUserPosts = async userId => {
     return await prisma.user.findMany({
       where: { id: userId },
       include: {
+        author: {
+          select: {
+            name: true,
+          },
+        },
         liker: true,
         followers: true,
         followings: true,
         posts: true,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getPost = async postId => {
+  try {
+    return await prisma.post.findUnique({
+      where: {
+        id: postId,
       },
     });
   } catch (err) {
