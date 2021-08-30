@@ -19,10 +19,10 @@ export const createPost = async (userId, data) => {
   }
 };
 
-export const updatePost = async (postId, data) => {
+export const updatePost = async data => {
   try {
     return await prisma.post.update({
-      where: { id: postId },
+      where: { id: data.postid },
       data: {
         title: data.title,
         content: data.content,

@@ -14,7 +14,7 @@ export const WritePost = async (req, res, next) => {
 
 export const editPost = async (req, res, next) => {
   try {
-    const editedPost = await PostRepository.updatePost(req.params.posdId, req.body);
+    const editedPost = await PostRepository.updatePost(req.body);
     if (!editedPost) {
       res.send('게시글 수정중 오류가 발생하였습니다.');
     } else {
