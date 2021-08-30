@@ -24,18 +24,20 @@ export const getAllPosts = async () => {
 
 export const getUserPosts = async userId => {
   try {
+    console.log(userId);
     return await prisma.user.findMany({
       where: { id: userId },
       include: {
-        author: {
-          select: {
-            name: true,
-          },
-        },
         liker: true,
         followers: true,
         followings: true,
-        posts: true,
+        posts: {
+          include: {
+            thumbnail: true,
+            hashtags: true,
+            liker: true,
+          },
+        },
       },
     });
   } catch (err) {
@@ -48,6 +50,13 @@ export const getPost = async postId => {
     return await prisma.post.findUnique({
       where: {
         id: postId,
+      },
+      include: {
+        liker: true,
+        hashtags: true,
+        images: true,
+        comments: true,
+        thumbnail: true,
       },
     });
   } catch (err) {
