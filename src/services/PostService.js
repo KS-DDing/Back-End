@@ -28,7 +28,7 @@ export const editPost = async (req, res, next) => {
 
 export const deletePost = async (req, res, next) => {
   try {
-    const toDelete = await PostRepository.deletePost(req.body.postId);
+    const toDelete = await PostRepository.deletePost(parseInt(req.body.postId));
     if (!toDelete) {
       res.send('게시글 삭제도중 오류가 발생하였습니다.');
     } else {
