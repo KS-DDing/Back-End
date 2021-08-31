@@ -14,11 +14,20 @@ export const WritePost = async (req, res, next) => {
 
 export const editPost = async (req, res, next) => {
   try {
-    const editedPost = await PostRepository.updatePost(req.body);
-    if (!editedPost) {
-      res.send('게시글 수정중 오류가 발생하였습니다.');
+    const user = req.body.author;
+    if (user !== req.session.passport.user.id) {
+      res.send('잘못된 요청입니다.');
     } else {
-      res.status(200).send('게시글을 수정하였습니다.');
+      const data = {
+        title: req.body.title,
+        content: req.body.content,
+      };
+      const editedPost = await PostRepository.updatePost(parseInt(req.body.postid), data);
+      if (!editedPost) {
+        res.send('게시글 수정중 오류가 발생하였습니다.');
+      } else {
+        res.status(200).send('게시글을 수정하였습니다.');
+      }
     }
   } catch (err) {
     console.error(err);
