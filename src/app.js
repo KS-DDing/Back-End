@@ -6,6 +6,7 @@ import logger from 'morgan';
 import passport from 'passport';
 import env from '../config';
 import passportSession from '../config/Passport/index';
+import CommentController from './controllers/CommentController';
 import PostController from './controllers/PostController';
 import PostViewController from './controllers/PostViewController';
 import UserController from './controllers/UserController';
@@ -33,7 +34,7 @@ app.use(passport.session());
 app.use('/api/users', UserController);
 app.use('/api/post', PostController);
 app.use('/api/posts', PostViewController);
-
+app.use('/api/comment', CommentController);
 app.listen(env.PORT, () => {
   console.log('서버시작');
 });
