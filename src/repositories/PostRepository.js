@@ -34,11 +34,10 @@ export const updatePost = async (postid, data) => {
   }
 };
 
+//prisma로는 삭제 잘 안되서 생 쿼리로 날림.
 export const deletePost = async postId => {
   try {
-    return await prisma.post.delete({
-      where: { id: postId },
-    });
+    return await prisma.$queryRaw(`DELETE FROM posts WHERE id = ${postId};`);
   } catch (err) {
     console.error(err);
   }

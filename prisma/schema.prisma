@@ -41,10 +41,11 @@ model Post {
   retweetterPost   Post[] @relation("Retweet")
 
   comments  Comment[]
-  thumbnail thumbnail?    @relation("thumbnailImage")
-  images    Image[]       @relation("PostImage")
+  images    Image[]
   hashtags  PostHashtag[]
   liker     Like[]
+  thumbnail Thumbnail?
+
   @@map("posts")
 }
 
@@ -63,22 +64,21 @@ model Comment {
 
 model Image {
   id        Int      @id @default(autoincrement())
-  src       String
+  src       String   @unique
   createAt  DateTime @default(now())
   updateAt  DateTime @updatedAt
-  postImage Post     @relation("PostImage", fields: [postId], references: [id])
-  contentId Int
+  postImage Post     @relation(fields: [postId], references: [id])
   postId    Int
 
   @@map("images")
 }
 
-model thumbnail {
+model Thumbnail {
   id             Int      @id @default(autoincrement())
-  src            String
+  src            String   @unique
   createAt       DateTime @default(now())
   updateAt       DateTime @updatedAt
-  thumbnailImage Post     @relation("thumbnailImage", fields: [postId], references: [id])
+  thumbnail_post Post     @relation(fields: [postId], references: [id])
   postId         Int
 
   @@map("thumbnails")
