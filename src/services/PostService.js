@@ -65,13 +65,13 @@ export const deletePost = async (req, res, next) => {
   try {
     const post = await getPost(req.body.postId);
     if (post.thumbnail.src) {
-      console.log('hi');
-      fs.unlinkSync(`../${post.thumbnail.src}`);
+      fs.unlinkSync(__dirname + '/../../' + post.thumbnail.src);
     }
-    if (post.contentImages.src) {
-      post.contentImages.forEach(element => {
+    console.log(post)
+    if (post.images[0]) {
+      post.images.forEach(element => {
         console.log(element.src);
-        fs.unlinkSync('../../' + element.src);
+        fs.unlinkSync(__dirname + '/../../' + element.src);
       });
     }
     await PostRepository.deletePost(parseInt(req.body.postId));
