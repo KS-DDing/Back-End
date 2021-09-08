@@ -67,7 +67,7 @@ export const deletePost = async (req, res, next) => {
     if (post.thumbnail.src) {
       fs.unlinkSync(__dirname + '/../../' + post.thumbnail.src);
     }
-    console.log(post)
+
     if (post.images[0]) {
       post.images.forEach(element => {
         console.log(element.src);

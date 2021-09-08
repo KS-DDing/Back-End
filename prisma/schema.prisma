@@ -11,30 +11,35 @@ generator client {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
-  email      String    @unique @db.VarChar(30)
-  name       String    @unique @db.VarChar(30)
-  password   String    @db.VarChar(200)
-  createAt   DateTime  @default(now())
-  updateAt   DateTime? @updatedAt
+  id         Int        @id @default(autoincrement())
+  email      String     @unique @db.VarChar(30)
+  name       String     @unique @db.VarChar(30)
+  password   String     @db.VarChar(200)
+  createAt   DateTime   @default(now())
+  updateAt   DateTime?  @updatedAt
   posts      Post[]
-  isAdmin    Int       @default(0) //admin일 경우 1, 일반 사용자일 경우 0
+  isAdmin    Int        @default(0) //admin일 경우 1, 일반 사용자일 경우 0
   comments   Comment[]
   liker      Like[]
-  followers  User[]    @relation("UserFollows", references: [id])
-  followings User[]    @relation("UserFollows", references: [id])
+  followers  User[]     @relation("UserFollows", references: [id])
+  followings User[]     @relation("UserFollows", references: [id])
   images     Image[]
+  categories Category[]
+
+  user_profile Profile?
   @@map(name: "users")
 }
 
 model Post {
-  id       Int      @id @default(autoincrement())
-  title    String
-  content  String   @db.Text
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
-  author   User     @relation(fields: [userId], references: [id])
-  userId   Int
+  id           Int       @id @default(autoincrement())
+  title        String
+  content      String    @db.Text
+  createAt     DateTime  @default(now())
+  updateAt     DateTime  @updatedAt
+  author       User      @relation(fields: [userId], references: [id])
+  userId       Int
+  postCategory Category? @relation(fields: [categoryId], references: [id])
+  categoryId   Int?
 
   retweettedPost   Post?  @relation("Retweet", fields: [retweettedPostId], references: [id])
   retweettedPostId Int?
@@ -47,6 +52,15 @@ model Post {
   thumbnail Thumbnail?
 
   @@map("posts")
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(50)
+
+  post   Post[]
+  author User   @relation(fields: [userId], references: [id])
+  userId Int
 }
 
 model Comment {
@@ -115,4 +129,14 @@ model Like {
 
   @@id([userId, postId])
   @@map("likes")
+}
+
+model Profile {
+  id        Int     @id @default(autoincrement())
+  introduce String?
+  email     String?
+  company   String?
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
 }

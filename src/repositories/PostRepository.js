@@ -12,6 +12,11 @@ export const createPost = async (userId, data) => {
             id: userId,
           },
         },
+        postCategory: {
+          connect: {
+            id: data.categoryId,
+          },
+        },
       },
     });
   } catch (err) {
@@ -27,6 +32,7 @@ export const updatePost = async (postid, data) => {
         title: data.title,
         content: data.content,
         userId: data.userId,
+        categoryId: data.categoryId,
       },
     });
   } catch (err) {
